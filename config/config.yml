@@ -1,0 +1,13 @@
+app:
+  name: "go-clean-template"
+  version: "1.0.0"
+
+http:
+  port: "8080"
+  jwt_secret: "secret"
+
+logger:
+  log_level: "info"
+
+postgres:
+  pg_dsn: "host=localhost user=root password=password dbname=test port=5432 sslmode=disable TimeZone=Asia/Tehran"

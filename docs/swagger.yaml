@@ -1,0 +1,127 @@
+definitions:
+  dto.CreateNewBlogPostDto:
+    properties:
+      authorId:
+        type: integer
+      content:
+        type: string
+      title:
+        type: string
+    required:
+    - authorId
+    - content
+    - title
+    type: object
+  dto.UpdateBlogPostDto:
+    properties:
+      authorId:
+        type: integer
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /blog-post:
+    get:
+      parameters:
+      - description: no comment
+        in: query
+        name: limit
+        type: integer
+      - description: no comment
+        in: query
+        name: skip
+        type: integer
+      - description: no comment
+        in: query
+        name: author_id
+        type: integer
+      - description: no comment
+        in: query
+        name: from_date
+        type: string
+      - description: no comment
+        in: query
+        name: to_date
+        type: string
+      produces:
+      - application/json
+      responses: {}
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: no comment
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateNewBlogPostDto'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+  /blog-post/{id}:
+    delete:
+      parameters:
+      - description: no comment
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+    get:
+      parameters:
+      - description: no comment
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: no comment
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateBlogPostDto'
+      - description: no comment
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+  /blog-post/get-by-title/{title}:
+    get:
+      parameters:
+      - description: no comment
+        in: path
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
