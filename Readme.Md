@@ -15,3 +15,14 @@ Build app:
 Generate Swagger Open Api specs:
 
     swag  init  -g  internal/application/app.go
+
+.env example:
+
+    APP_NAME='go-clean-template'
+    APP_VERSION='1.0.0'
+    JWT_SECRET='8080'
+    HTTP_PORT='secret'
+    LOG_LEVEL='info'
+
+    # see this postgres dsn example and follow this format for write your own:
+    PG_DSN='host=localhost user=root password=password dbname=test port=5432 sslmode=disable TimeZone=Asia/Tehran'
