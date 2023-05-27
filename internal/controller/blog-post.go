@@ -21,7 +21,7 @@ func NewBlogPostController(useCase usecase.BlogPost) BlogPost {
 // @Param        body  body  dto.CreateNewBlogPostDto  true "no comment"
 // @Router       /blog-post [post]
 // @Security BearerAuth
-func (bc BlogPostController) CreateNewBlogPost(c *fiber.Ctx) error {
+func (bc *BlogPostController) CreateNewBlogPost(c *fiber.Ctx) error {
 	body := dto.CreateNewBlogPostDto{}
 	c.BodyParser(&body)
 	err := utils.ValidateDto(body)
@@ -39,7 +39,7 @@ func (bc BlogPostController) CreateNewBlogPost(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        id  path  int  true  "no comment"
 // @Router       /blog-post/{id} [get]
-func (bc BlogPostController) GetBlogPostById(c *fiber.Ctx) error {
+func (bc *BlogPostController) GetBlogPostById(c *fiber.Ctx) error {
 	postId, err := c.ParamsInt("id")
 	if err != nil {
 		return fiber.ErrBadRequest
@@ -55,7 +55,7 @@ func (bc BlogPostController) GetBlogPostById(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        title  path  string  true "no comment"
 // @Router       /blog-post/get-by-title/{title} [get]
-func (bc BlogPostController) GetBlogPostByName(c *fiber.Ctx) error {
+func (bc *BlogPostController) GetBlogPostByName(c *fiber.Ctx) error {
 	postTitle := c.Params("title")
 
 	result, err := bc.useCase.GetBlogPostByTitle(postTitle)
@@ -72,7 +72,7 @@ func (bc BlogPostController) GetBlogPostByName(c *fiber.Ctx) error {
 // @Param        from_date  query  string  false "no comment"
 // @Param        to_date  query  string  false "no comment"
 // @Router       /blog-post [get]
-func (bc BlogPostController) GetAllBlogPosts(c *fiber.Ctx) error {
+func (bc *BlogPostController) GetAllBlogPosts(c *fiber.Ctx) error {
 	queries := dto.FilterBlogPosts{}
 	err := c.QueryParser(&queries)
 	if err != nil {
@@ -94,7 +94,7 @@ func (bc BlogPostController) GetAllBlogPosts(c *fiber.Ctx) error {
 // @Param        id path  int  true  "no comment"
 // @Router       /blog-post/{id} [put]
 // @Security BearerAuth
-func (bc BlogPostController) UpdateBlogPost(c *fiber.Ctx) error {
+func (bc *BlogPostController) UpdateBlogPost(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		return fiber.ErrBadRequest
@@ -118,7 +118,7 @@ func (bc BlogPostController) UpdateBlogPost(c *fiber.Ctx) error {
 // @Param        id path  int  true "no comment"
 // @Router       /blog-post/{id} [delete]
 // @Security BearerAuth
-func (bc BlogPostController) DeletePost(c *fiber.Ctx) error {
+func (bc *BlogPostController) DeletePost(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		return fiber.ErrBadRequest
