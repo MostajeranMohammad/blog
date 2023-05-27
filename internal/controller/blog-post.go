@@ -29,7 +29,7 @@ func (bc *BlogPostController) CreateNewBlogPost(c *fiber.Ctx) error {
 		return fiber.NewError(400, err.Error())
 	}
 
-	result, err := bc.useCase.CreateNewBlogPost(body)
+	result, err := bc.useCase.CreateNewBlogPost(c.Context(), body)
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (bc *BlogPostController) GetBlogPostById(c *fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	result, err := bc.useCase.GetBlogPostById(postId)
+	result, err := bc.useCase.GetBlogPostById(c.Context(), postId)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (bc *BlogPostController) GetBlogPostById(c *fiber.Ctx) error {
 func (bc *BlogPostController) GetBlogPostByName(c *fiber.Ctx) error {
 	postTitle := c.Params("title")
 
-	result, err := bc.useCase.GetBlogPostByTitle(postTitle)
+	result, err := bc.useCase.GetBlogPostByTitle(c.Context(), postTitle)
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func (bc *BlogPostController) GetAllBlogPosts(c *fiber.Ctx) error {
 
 	limit, skip := c.QueryInt("limit"), c.QueryInt("skip")
 
-	result, err := bc.useCase.GetAllBlogPosts(queries, limit, skip)
+	result, err := bc.useCase.GetAllBlogPosts(c.Context(), queries, limit, skip)
 	if err != nil {
 		return err
 	}
@@ -107,7 +107,7 @@ func (bc *BlogPostController) UpdateBlogPost(c *fiber.Ctx) error {
 		return fiber.NewError(400, err.Error())
 	}
 
-	result, err := bc.useCase.UpdateBlogPost(id, body)
+	result, err := bc.useCase.UpdateBlogPost(c.Context(), id, body)
 	if err != nil {
 		return err
 	}
@@ -124,7 +124,7 @@ func (bc *BlogPostController) DeletePost(c *fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	result, err := bc.useCase.DeletePost(id)
+	result, err := bc.useCase.DeletePost(c.Context(), id)
 	if err != nil {
 		return err
 	}

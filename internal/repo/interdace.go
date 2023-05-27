@@ -1,17 +1,19 @@
 package repo
 
 import (
+	"context"
+
 	"github.com/MostajeranMohammad/blog/internal/entity"
 	"gorm.io/gorm/clause"
 )
 
 type (
 	BlogPost interface {
-		Create(p entity.BlogPost) (entity.BlogPost, error)
-		GetById(id int) (entity.BlogPost, error)
-		GetByTitle(title string) (entity.BlogPost, error)
-		GetAll(filter clause.AndConditions, skip int, limit int) ([]entity.BlogPost, error)
-		Update(id int, m entity.BlogPost) (entity.BlogPost, error)
-		Delete(id int) (entity.BlogPost, error)
+		Create(ctx context.Context, p entity.BlogPost) (entity.BlogPost, error)
+		GetById(ctx context.Context, id int) (entity.BlogPost, error)
+		GetByTitle(ctx context.Context, title string) (entity.BlogPost, error)
+		GetAll(ctx context.Context, filter clause.AndConditions, skip int, limit int) ([]entity.BlogPost, error)
+		Update(ctx context.Context, id int, m entity.BlogPost) (entity.BlogPost, error)
+		Delete(ctx context.Context, id int) (entity.BlogPost, error)
 	}
 )
