@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/MostajeranMohammad/blog/internal/entity"
+	"github.com/MostajeranMohammad/blog/pkg/utils"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -18,9 +19,9 @@ func NewBlogPostRepo(db *gorm.DB) BlogPost {
 	}
 }
 
-func (br *BlogPostRepo) Create(ctx context.Context, p map[string]interface{}) (entity.BlogPost, error) {
+func (br *BlogPostRepo) Create(ctx context.Context, d map[string]interface{}) (entity.BlogPost, error) {
 	createdPost := entity.BlogPost{}
-	result := br.db.Model(&createdPost).WithContext(ctx).Clauses(clause.Returning{}).Create(p)
+	result := br.db.Model(&createdPost).WithContext(ctx).Clauses(clause.Returning{}).Create(utils.ChangeMapFieldsToSnakeCase(d))
 	return createdPost, result.Error
 }
 
@@ -51,9 +52,9 @@ func (br *BlogPostRepo) GetAll(ctx context.Context, filter clause.AndConditions,
 	return blogPosts, result.Error
 }
 
-func (br *BlogPostRepo) Update(ctx context.Context, id int, m map[string]interface{}) (entity.BlogPost, error) {
+func (br *BlogPostRepo) Update(ctx context.Context, id int, d map[string]interface{}) (entity.BlogPost, error) {
 	updatedBlogPost := entity.BlogPost{}
-	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Model(&updatedBlogPost).Where("id = ?", id).Updates(m)
+	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Model(&updatedBlogPost).Where("id = ?", id).Updates(utils.ChangeMapFieldsToSnakeCase(d))
 	return updatedBlogPost, result.Error
 }
 

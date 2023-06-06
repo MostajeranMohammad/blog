@@ -15,7 +15,7 @@ type (
 	}
 	UpdateBlogPostDto struct {
 		Title    string
-		AuthorId uint `validate:"gt=0"`
+		AuthorId uint
 		Content  string
 	}
 	FilterBlogPosts struct {
