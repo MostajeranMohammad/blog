@@ -36,16 +36,15 @@ func Run(cfg *config.Config) {
 	}
 
 	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalln("failed to extract sqlDB")
+	}
 	defer func() {
-		sqlDB.Close()
+		err = sqlDB.Close()
 		if err != nil {
 			log.Fatalln("failed to close sqlDB")
 		}
 	}()
-
-	if err != nil {
-		log.Fatalln("failed to extract sqlDB")
-	}
 
 	// auto migrate models
 	db.AutoMigrate(&entity.BlogPost{})
