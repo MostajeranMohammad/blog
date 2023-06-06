@@ -18,9 +18,10 @@ func NewBlogPostRepo(db *gorm.DB) BlogPost {
 	}
 }
 
-func (br *BlogPostRepo) Create(ctx context.Context, p entity.BlogPost) (entity.BlogPost, error) {
-	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Create(&p)
-	return p, result.Error
+func (br *BlogPostRepo) Create(ctx context.Context, p map[string]interface{}) (entity.BlogPost, error) {
+	createdPost := entity.BlogPost{}
+	result := br.db.Model(&createdPost).WithContext(ctx).Clauses(clause.Returning{}).Create(p)
+	return createdPost, result.Error
 }
 
 func (br *BlogPostRepo) GetById(ctx context.Context, id int) (entity.BlogPost, error) {
@@ -50,7 +51,7 @@ func (br *BlogPostRepo) GetAll(ctx context.Context, filter clause.AndConditions,
 	return blogPosts, result.Error
 }
 
-func (br *BlogPostRepo) Update(ctx context.Context, id int, m entity.BlogPost) (entity.BlogPost, error) {
+func (br *BlogPostRepo) Update(ctx context.Context, id int, m map[string]interface{}) (entity.BlogPost, error) {
 	updatedBlogPost := entity.BlogPost{}
 	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Model(&updatedBlogPost).Where("id = ?", id).Updates(m)
 	return updatedBlogPost, result.Error

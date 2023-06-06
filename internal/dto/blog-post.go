@@ -3,7 +3,6 @@ package dto
 import (
 	"time"
 
-	"github.com/MostajeranMohammad/blog/internal/entity"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm/clause"
 )
@@ -25,22 +24,6 @@ type (
 		ToDate   string `query:"to_date"`
 	}
 )
-
-func (d CreateNewBlogPostDto) ToEntityModel() entity.BlogPost {
-	return entity.BlogPost{
-		Title:    d.Title,
-		AuthorId: d.AuthorId,
-		Content:  d.Content,
-	}
-}
-
-func (d UpdateBlogPostDto) ToEntityModel() entity.BlogPost {
-	return entity.BlogPost{
-		Title:    d.Title,
-		AuthorId: d.AuthorId,
-		Content:  d.Content,
-	}
-}
 
 func (q FilterBlogPosts) ToQueryModel() (clause.AndConditions, error) {
 	queryModel := clause.AndConditions{}

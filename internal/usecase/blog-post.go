@@ -16,8 +16,8 @@ func NewBlogPostUsecase(repo repo.BlogPost) BlogPost {
 	return &BlogPostUsecase{repo}
 }
 
-func (bu *BlogPostUsecase) CreateNewBlogPost(ctx context.Context, body dto.CreateNewBlogPostDto) (entity.BlogPost, error) {
-	return bu.repo.Create(ctx, body.ToEntityModel())
+func (bu *BlogPostUsecase) CreateNewBlogPost(ctx context.Context, body map[string]interface{}) (entity.BlogPost, error) {
+	return bu.repo.Create(ctx, body)
 }
 
 func (bu *BlogPostUsecase) GetBlogPostById(ctx context.Context, id int) (entity.BlogPost, error) {
@@ -36,8 +36,8 @@ func (bu *BlogPostUsecase) GetAllBlogPosts(ctx context.Context, dto dto.FilterBl
 	return bu.repo.GetAll(ctx, query, skip, limit)
 }
 
-func (bu *BlogPostUsecase) UpdateBlogPost(ctx context.Context, id int, body dto.UpdateBlogPostDto) (entity.BlogPost, error) {
-	return bu.repo.Update(ctx, id, body.ToEntityModel())
+func (bu *BlogPostUsecase) UpdateBlogPost(ctx context.Context, id int, body map[string]interface{}) (entity.BlogPost, error) {
+	return bu.repo.Update(ctx, id, body)
 }
 
 func (bu *BlogPostUsecase) DeletePost(ctx context.Context, id int) (entity.BlogPost, error) {

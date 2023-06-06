@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"encoding/json"
+
 	"github.com/MostajeranMohammad/blog/internal/dto"
 	"github.com/MostajeranMohammad/blog/internal/entity"
 	"github.com/MostajeranMohammad/blog/internal/usecase"
@@ -29,7 +31,13 @@ func (bc *BlogPostController) CreateNewBlogPost(c *fiber.Ctx) error {
 		return fiber.NewError(400, err.Error())
 	}
 
-	result, err := bc.useCase.CreateNewBlogPost(c.Context(), body)
+	mapBody := make(map[string]interface{})
+	err = json.Unmarshal(c.Body(), &mapBody)
+	if err != nil {
+		return fiber.NewError(400, "failed to unmarshal json data")
+	}
+
+	result, err := bc.useCase.CreateNewBlogPost(c.Context(), mapBody)
 	if err != nil {
 		return err
 	}
@@ -107,7 +115,13 @@ func (bc *BlogPostController) UpdateBlogPost(c *fiber.Ctx) error {
 		return fiber.NewError(400, err.Error())
 	}
 
-	result, err := bc.useCase.UpdateBlogPost(c.Context(), id, body)
+	mapBody := make(map[string]interface{})
+	err = json.Unmarshal(c.Body(), &mapBody)
+	if err != nil {
+		return fiber.NewError(400, "failed to unmarshal json data")
+	}
+
+	result, err := bc.useCase.UpdateBlogPost(c.Context(), id, mapBody)
 	if err != nil {
 		return err
 	}
