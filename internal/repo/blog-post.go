@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"time"
 
 	"github.com/MostajeranMohammad/blog/internal/entity"
 	"github.com/MostajeranMohammad/blog/pkg/utils"
@@ -20,14 +21,15 @@ func NewBlogPostRepo(db *gorm.DB) BlogPost {
 }
 
 func (br *BlogPostRepo) Create(ctx context.Context, d map[string]interface{}) (entity.BlogPost, error) {
-	createdPost := entity.BlogPost{}
-	result := br.db.Model(&createdPost).WithContext(ctx).Clauses(clause.Returning{}).Create(utils.ChangeMapFieldsToSnakeCase(d))
-	return createdPost, result.Error
+	post := utils.ChangeMapFieldsToSnakeCase(d)
+	post["created_at"] = time.Now()
+	result := br.db.Model(entity.BlogPost{}).WithContext(ctx).Clauses(clause.Returning{}).Create(&post)
+	return br.mapToStruct(post), result.Error
 }
 
 func (br *BlogPostRepo) GetById(ctx context.Context, id int) (entity.BlogPost, error) {
 	blogPost := entity.BlogPost{}
-	result := br.db.WithContext(ctx).First(&blogPost)
+	result := br.db.WithContext(ctx).Where("id = ?", id).First(&blogPost)
 	return blogPost, result.Error
 }
 
@@ -53,13 +55,25 @@ func (br *BlogPostRepo) GetAll(ctx context.Context, filter clause.AndConditions,
 }
 
 func (br *BlogPostRepo) Update(ctx context.Context, id int, d map[string]interface{}) (entity.BlogPost, error) {
-	updatedBlogPost := entity.BlogPost{}
-	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Model(&updatedBlogPost).Where("id = ?", id).Updates(utils.ChangeMapFieldsToSnakeCase(d))
-	return updatedBlogPost, result.Error
+	post := utils.ChangeMapFieldsToSnakeCase(d)
+	tempPost := entity.BlogPost{}
+	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Model(&tempPost).Where("id = ?", id).Updates(post)
+	return tempPost, result.Error
 }
 
 func (br *BlogPostRepo) Delete(ctx context.Context, id int) (entity.BlogPost, error) {
 	deletedPost := entity.BlogPost{}
 	result := br.db.WithContext(ctx).Clauses(clause.Returning{}).Where("id = ?", id).Delete(&deletedPost)
 	return deletedPost, result.Error
+}
+
+func (br *BlogPostRepo) mapToStruct(m map[string]interface{}) entity.BlogPost {
+	return entity.BlogPost{
+		Title:    m["title"].(string),
+		AuthorId: m["author_id"].(uint),
+		Content:  m["content"].(string),
+		Model: gorm.Model{
+			ID: m["id"].(uint),
+		},
+	}
 }

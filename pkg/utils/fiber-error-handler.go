@@ -6,6 +6,7 @@ import (
 	"github.com/MostajeranMohammad/blog/internal/entity"
 	"github.com/MostajeranMohammad/blog/pkg/logger"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 func FiberErrorHandler(logger logger.Interface) func(ctx *fiber.Ctx, err error) error {
@@ -17,6 +18,10 @@ func FiberErrorHandler(logger logger.Interface) func(ctx *fiber.Ctx, err error) 
 		var e *fiber.Error
 		if errors.As(err, &e) {
 			code = e.Code
+		}
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ctx.Status(404).JSON(entity.ResponseModel{Successful: false, Message: "record not found"})
 		}
 
 		if code == fiber.StatusInternalServerError {
