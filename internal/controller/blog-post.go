@@ -6,16 +6,18 @@ import (
 	"github.com/MostajeranMohammad/blog/internal/dto"
 	"github.com/MostajeranMohammad/blog/internal/entity"
 	"github.com/MostajeranMohammad/blog/internal/usecase"
+	"github.com/MostajeranMohammad/blog/pkg/logger"
 	"github.com/MostajeranMohammad/blog/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
 type BlogPostController struct {
 	useCase usecase.BlogPost
+	logger  logger.Logger
 }
 
-func NewBlogPostController(useCase usecase.BlogPost) BlogPost {
-	return &BlogPostController{useCase}
+func NewBlogPostController(useCase usecase.BlogPost, logger logger.Logger) BlogPost {
+	return &BlogPostController{useCase, logger}
 }
 
 // @Accept       json
@@ -93,7 +95,15 @@ func (bc *BlogPostController) GetAllBlogPosts(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(entity.ResponseModel{Successful: true, Data: result})
+	count, err := bc.useCase.Count(c.Context(), queries)
+	if err != nil {
+		bc.logger.Error(err.Error())
+	}
+
+	return c.JSON(entity.ResponseModel{Successful: true, Data: result, Meta: map[string]interface{}{
+		"returnedCount": len(result),
+		"count":         count,
+	}})
 }
 
 // @Accept       json

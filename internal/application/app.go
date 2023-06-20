@@ -56,7 +56,7 @@ func Run(cfg *config.Config) {
 	blogPostUsecase := usecase.NewBlogPostUsecase(blogPostRepo)
 
 	// initialize controllers
-	blogPostController := controller.NewBlogPostController(blogPostUsecase)
+	blogPostController := controller.NewBlogPostController(blogPostUsecase, *l)
 
 	// initialize guards
 	jwtGuard := guards.NewJWTGuard(cfg.JwtSecret)

@@ -36,6 +36,14 @@ func (bu *BlogPostUsecase) GetAllBlogPosts(ctx context.Context, dto dto.FilterBl
 	return bu.repo.GetAll(ctx, query, skip, limit)
 }
 
+func (bu *BlogPostUsecase) Count(ctx context.Context, dto dto.FilterBlogPosts) (int64, error) {
+	query, err := dto.ToQueryModel()
+	if err != nil {
+		return 0, err
+	}
+	return bu.repo.Count(ctx, query)
+}
+
 func (bu *BlogPostUsecase) UpdateBlogPost(ctx context.Context, id int, body map[string]interface{}) (entity.BlogPost, error) {
 	return bu.repo.Update(ctx, id, body)
 }

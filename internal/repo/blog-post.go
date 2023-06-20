@@ -54,6 +54,18 @@ func (br *BlogPostRepo) GetAll(ctx context.Context, filter clause.AndConditions,
 	return blogPosts, result.Error
 }
 
+func (br *BlogPostRepo) Count(ctx context.Context, filter clause.AndConditions) (int64, error) {
+	var count int64
+	query := br.db.Model(entity.BlogPost{}).WithContext(ctx)
+
+	if len(filter.Exprs) > 0 {
+		query.Where(filter)
+	}
+
+	result := query.Count(&count)
+	return count, result.Error
+}
+
 func (br *BlogPostRepo) Update(ctx context.Context, id int, d map[string]interface{}) (entity.BlogPost, error) {
 	post := utils.ChangeMapFieldsToSnakeCase(d)
 	tempPost := entity.BlogPost{}
