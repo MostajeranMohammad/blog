@@ -28,7 +28,7 @@ func (jg jwtGuard) GetOptionalJWTGuard() fiber.Handler {
 		SigningKey: jwtware.SigningKey{Key: []byte(jg.signingKey)},
 		Filter: func(c *fiber.Ctx) bool {
 			tokenString := c.GetReqHeaders()["Authorization"]
-			return len(strings.Split(tokenString, " ")) < 2
+			return len(strings.Split(tokenString[0], " ")) < 2
 		},
 	})
 }
